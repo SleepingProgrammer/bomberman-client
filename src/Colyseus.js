@@ -1,7 +1,8 @@
 import * as Colyseus from "colyseus.js"; // not necessary if included via <script> tag.
 import CacheHelper from "./CacheHelper";
+import Constants from "./Constants";
 
-let client = new Colyseus.Client("ws://localhost:8080");
+let client = new Colyseus.Client(Constants.COLYSEUS_SERVER);
 window.client = client;
 console.log({ client });
 let room = null;
@@ -23,7 +24,7 @@ export const joinGame = async (username) => {
   } else {
     try {
       console.log("No existing room to rejoin");
-      room = await client.joinOrCreate("bomberman_room", {
+      room = await client.joinOrCreate(Constants.ROOM_NAME, {
         username,
         autoDispose: true,
       });
