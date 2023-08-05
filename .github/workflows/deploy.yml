@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
@@ -22,6 +22,6 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             cd /home/experiments/Bomberman/bomberman-client
-            git pull https://${{secrets.GIT_USER}}:${{secrets.GIT_PAT}}@github.com/${{secrets.GIT_USER}}/bomberman-client.git main
+            git pull https://${{secrets.GIT_USER}}:${{secrets.GIT_PAT}}@github.com/${{secrets.GIT_USER}}/bomberman-client.git master
             npm install
             npm run build
