@@ -21,4 +21,7 @@ jobs:
           sshpass -p "${{ secrets.SERVER_PASSWORD }}" \
           ssh -o StrictHostKeyChecking=no \
           ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
-          'cd /home/experiments/Bomberman/bomberman-client && git pull https://${{secrets.GIT_USER}}:${{secrets.GIT_PAT}}@github.com/${{secrets.GIT_USER}}/bomberman-client.git master && npm ic && npm run build'
+          cd /home/experiments/Bomberman/bomberman-client
+          git pull
+          npm install
+          npm run build
