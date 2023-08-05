@@ -1,3 +1,4 @@
+window.global ||= window;
 import React, { StrictMode } from "react";
 import { useState } from "react";
 import ReactDOM from "react-dom/client";
