@@ -5,6 +5,7 @@ import Constants from "./Constants";
 let client = new Colyseus.Client(Constants.COLYSEUS_SERVER);
 window.client = client;
 console.log({ client });
+
 let room = null;
 
 export const joinGame = async (username) => {
