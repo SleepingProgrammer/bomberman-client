@@ -24,4 +24,5 @@ jobs:
           cd /home/experiments/Bomberman/bomberman-client
           git pull
           npm install
+          rm -r ./dist
           npm run build
