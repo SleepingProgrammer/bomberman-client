@@ -21,8 +21,7 @@ jobs:
           sshpass -p "${{ secrets.SERVER_PASSWORD }}" \
           ssh -o StrictHostKeyChecking=no \
           ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
-          "cd /home/experiments/Bomberman/bomberman-client; \
-          git pull; \
-          npm install; \
-          rm -r /home/experiments/Bomberman/bomberman-client/dist; \
-          npm run build"
+          cd /home/experiments/Bomberman/bomberman-client
+          git pull
+          npm install
+          npm run build
