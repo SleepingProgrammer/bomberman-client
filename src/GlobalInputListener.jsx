@@ -14,8 +14,7 @@ function GlobalInputListener() {
   }, []);
 
   const handleKeyPress = (event) => {
-    // Handle your input event here
-    console.log({room})
+    // Handle your input event here 
     console.log("Key pressed:", event.key);
     let action = KeyBindings[event.key.toLowerCase()];
     console.log({ action });

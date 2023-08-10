@@ -5,9 +5,11 @@ const AppContext = React.createContext({});
 export default AppContext;
 
 export const AppContextProvider = (props) => {
-  const [room, setRoom] = useState(null);
+  const [room, setRoom] = useState(null); //NOTE: ROOM IS ACTUALLY ROOM.STATE already
   const [player, setPlayer] = useState(null);
   const [players, setPlayers] = useState(null);
+  const [game, setGame] = useState(null)
+  const [container, setContainer] = useState(null);
   const [bombs, setBombs] = useState(null);
   const [map, setMap] = useState(null);
   const [lastUpdate, setLastUpdate] = useState(new Date());
@@ -41,6 +43,7 @@ export const AppContextProvider = (props) => {
   return (
     <AppContext.Provider
       value={{
+        game, container, setContainer, setGame,
         room,
         player,
         setPlayer,

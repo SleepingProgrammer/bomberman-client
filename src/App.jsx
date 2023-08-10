@@ -6,6 +6,7 @@ import GlobalInputListener from "./GlobalInputListener";
 import { useContext } from "react";
 import AppContext from "./AppContext";
 import { room as colyseusRoom } from "./Colyseus";
+import Game from "./Game";
 
 const tileSize = 64;
 const renderSize = 64;
@@ -90,8 +91,13 @@ function Tile(props) {
         position: "absolute",
         left: props.x,
         top: props.y,
+        wordWrap: "break-word",
       }}
-    ></div>
+    >
+      {Math.floor(props.x / tileSize)},{Math.floor(props.y / tileSize)}
+      <br />
+      {props.children}
+    </div>
   );
 }
 
@@ -102,7 +108,8 @@ function Player(props) {
       style={{
         width: tileSize,
         height: tileSize,
-        backgroundColor: playerName == props.name ? "blue" : "red",
+        backgroundColor:
+          playerName == props.name ? "rgba(0,255,0,.8)" : "rgba(255,0,0,.8)",
         position: "absolute",
         left: props.x,
         top: props.y,
@@ -133,15 +140,18 @@ function App(props) {
   }, [room]);
 
   useEffect(() => {
-    update();
+    // update();
   }, [lastUpdate]);
 
   const update = () => {
+    initializeMap();
     renderBombs();
     renderPlayers();
   };
 
   const initializeMap = () => {
+    if (map == null) return;
+
     console.log({ room });
     const _floor = [];
 
@@ -152,21 +162,29 @@ function App(props) {
       for (let col = 0; col < cols; col++) {
         const tile = map.get(`${col},${row}`);
         if (tile == null) continue;
-        const tileValue = tile.content == "wall" ? 1 : 0;
+        let tileContents = tile.contents.map((_c) => _c.type);
+        console.log(`${col},${row}`, { tile, tileContents });
+        const tileValue = tileContents.includes("wall") ? 1 : 0;
         const x = col * renderSize + renderOffset.x;
         const y = row * renderSize + renderOffset.y;
-
+        console.log({ tileValue });
         if (tileValue === 1) {
           _floor.push(
-            <Tile key={`${x}-${y}`} tile={`/assets/wall.png`} x={x} y={y} />
+            <Tile key={`${x}-${y}`} tile={`/assets/wall.png`} x={x} y={y}>
+              {tileContents.join(",")}
+            </Tile>
           );
         } else if (tileValue === 0) {
           _floor.push(
-            <Tile key={`${x}-${y}`} tile={`/assets/floor.png`} x={x} y={y} />
+            <Tile key={`${x}-${y}`} tile={`/assets/floor.png`} x={x} y={y}>
+              {tileContents.join(",")}
+            </Tile>
           );
         } else {
           _floor.push(
-            <Tile key={`${x}-${y}`} tile={`/assets/floor.png`} x={x} y={y} />
+            <Tile key={`${x}-${y}`} tile={`/assets/floor.png`} x={x} y={y}>
+              {tileContents.join(",")}
+            </Tile>
           );
         }
       }
@@ -218,13 +236,15 @@ function App(props) {
   };
   if (room == null) return <div>Loading...</div>;
 
+  console.log({
+    room,
+    roomState: room?.state,
+  });
+
   return (
     <div>
-      <GlobalInputListener />
-      <div id="map">{floor}</div>
-      <div id="bombs">{bombsDisplay}</div>
-      <div id="players">{playersDisplay}</div>
-
+      <GlobalInputListener /> <Game />
+      <h1> State: {room?.gameState}</h1>
       <button
         type="button"
         onClick={() => {
