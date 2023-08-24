@@ -62,12 +62,12 @@ const Game = () => {
 
   const updateLoop = () => {
     console.log("updateLoop");
-    initializeMap();
+    renderMap();
     renderBombs();
     renderPlayers();
   };
 
-  const initializeMap = () => {
+  const renderMap = () => {
     if (map == null) return;
 
     console.log({ room });
@@ -81,21 +81,17 @@ const Game = () => {
         const tile = map.get(`${col},${row}`);
         if (tile == null) continue;
         let tileContents = tile.contents.map((_c) => _c.type);
-        console.log(`${col},${row}`, { tile, tileContents });
-        const tileValue = tileContents.includes("wall") ? 1 : 0;
+        console.log(`${col},${row}`, { tile, tileContents }); 
         const x = col * renderSize;
-        const y = row * renderSize;
-        console.log({ tileValue });
-
-        // Create a Tile instance and add it to the container
-        const tileType = tileValue === 1 ? "wall" : "floor";
-
+        const y = row * renderSize; 
+ 
         const tileInstance = new Tile({
           x,
           y,
-          type: tileType,
+          type: "floor",
           width: renderSize,
           height: renderSize,
+          contents: tileContents,
         });
 
         tileInstance.render(container);
@@ -140,6 +136,7 @@ const Game = () => {
       _bombInstance.render(container);
     });
   };
+
 
   return <div id="pixi-container"></div>;
 };
