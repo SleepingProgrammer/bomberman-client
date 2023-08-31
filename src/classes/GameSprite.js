@@ -49,11 +49,18 @@ class GameSprite {
   //We can specify a texture path but we default to its type
   loadSprite(texturePath = null) {
     if (texturePath == null) texturePath = contentImages[this.type];
-
-    console.log({texturePath})
+ 
     this.texture = PIXI.Texture.from(texturePath);
 
+    if(this.sprite)
+      this.sprite.destroy();
+    
     this.sprite = new PIXI.Sprite(this.texture);
+    this.configureSprite();
+  }
+
+  //configure the sprite
+  configureSprite() {
     this.sprite.anchor.set(0);
     this.sprite.x = this.x;
     this.sprite.y = this.y;
@@ -64,19 +71,28 @@ class GameSprite {
   }
 
   render = (container) => {
-    console.log("render-bug inner");
-    if(this.sprite == null) this.loadSprite(
-      contentImages[this.type]
-    );
-
-    console.log("d1,", {container, sprite: this.sprite})
-
+    if (container == null) {
+      console.error("Render failed - no container", {
+        id: this.id,
+        x: this.x,
+        y: this.y,
+      });
+    }
+ 
+    if (this.sprite == null) this.loadSprite(contentImages[this.type]);
+ 
     container.addChild(this.sprite);
 
     this.postRender?.(container);
-  }
+  };
+
+  destroy = () => {
+    this.sprite.destroy();
+  };
 
   // Add any additional methods or logic for the Tile class here
+  onDestroy = () => { 
+  };
 }
 
 export default GameSprite;

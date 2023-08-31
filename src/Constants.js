@@ -13,4 +13,6 @@ if (buildMode === "STAGE") {
 
 Constants.TILE_SIZE = 64;
 
+Constants.RENDER_OFFSET = { x: 2, y: 0 };
+
 export default Constants;

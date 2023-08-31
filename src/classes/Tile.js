@@ -15,22 +15,21 @@ class Tile extends GameSprite {
 
   // Add any additional methods or logic for the Tile class here
   //We should render above the tile its contents
-  renderContents = (container) => {
-    console.log({
-      renderingContents: this.contents,
-    })
+  renderContents = (container) => { 
     this.contents.forEach((_object) => { 
-      console.log({
-        _object
-      })
-      const pixiObject = new GameObject({
-        x: this.x,
-        y: this.y,
-        type: _object,
-        width: renderSize,
-        height: renderSize, 
-      });
-      pixiObject.render(container);
+
+      //If object isn't a bomb, let's render it
+      if (_object != "bomb") {
+        const pixiObject = new GameObject({
+          x: this.x + renderOffset.x,
+          y: this.y + renderOffset.y,
+          type: _object,
+          width: renderSize,
+          height: renderSize,
+        });
+        pixiObject.render(container);
+        return;
+      } 
     });
   }
 }

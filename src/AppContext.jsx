@@ -14,6 +14,8 @@ export const AppContextProvider = (props) => {
   const [map, setMap] = useState(null);
   const [lastUpdate, setLastUpdate] = useState(new Date());
   const [playerName, setPlayerName] = useState("");
+  const [layerManager, setLayerManager] = useState(null)
+
 
   const [initializedRoom, setInitializedRoom] = useState(false);
   useEffect(() => {
@@ -32,11 +34,7 @@ export const AppContextProvider = (props) => {
         setBombs(state.bombs); 
         setLastUpdate(new Date());
       });
-
-      roomInstance.onMessage("game_over", (message) => {
-        console.log("game_over", { message });
-        alert(`Game Over: player ${message.winner} won!`);
-      });
+  
     }
   }, []);
 
@@ -53,6 +51,9 @@ export const AppContextProvider = (props) => {
         lastUpdate,
         map,
         bombs,
+        layerManager,
+        setLayerManager, 
+
       }}
     >
       {props.children}
