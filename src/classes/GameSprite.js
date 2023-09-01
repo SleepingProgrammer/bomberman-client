@@ -48,13 +48,16 @@ class GameSprite {
 
   //We can specify a texture path but we default to its type
   loadSprite(texturePath = null) {
+    console.log({
+      type: this.type,
+    })
     if (texturePath == null) texturePath = contentImages[this.type];
  
     this.texture = PIXI.Texture.from(texturePath);
 
     if(this.sprite)
       this.sprite.destroy();
-    
+
     this.sprite = new PIXI.Sprite(this.texture);
     this.configureSprite();
   }

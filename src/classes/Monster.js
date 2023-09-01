@@ -2,20 +2,20 @@ import GameSprite from "./GameSprite";
 import * as PIXI from "pixi.js";
 
 const unitSprites = {
-  player: {
-    walk: "/assets/Player/Walk.png",
-    frames: 4,
+  zombie: {
+    walk: "/assets/Zombie/Walk.png",
   },
-  enemy: {
-    walk: "/assets/Enemy/Walk.png",
-    frames: 4,
+  monster: {
+    walk: "/assets/Zombie/Walk.png",
+    frames: 8,
+    animationSpeed: 0.2,
   },
 };
 
 const frameWidth = 32;
 const frameHeight = 32;
 const directionRows = ["front", "back", "right", "left"];
-class Player extends GameSprite {
+class Monster extends GameSprite {
   constructor(options) {
     super(options);
 
@@ -41,6 +41,7 @@ class Player extends GameSprite {
     for (let col = 0; col < unitSprites[type].frames; col++) {
       const x = col * frameWidth;
       const y = directionRows.indexOf(direction) * frameHeight;
+      console.log({type})
       const spritesheet = unitSprites[type].walk;
 
       const frameTexture = new PIXI.Texture(
@@ -84,4 +85,4 @@ class Player extends GameSprite {
   }
 }
 
-export default Player;
+export default Monster;

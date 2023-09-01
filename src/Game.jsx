@@ -7,6 +7,9 @@ import Bomb from "./classes/Bomb";
 import LayerManager from "./classes/managers/LayerManager";
 import BombHandler from "./handlers/BombHandler";
 import UIHandler from "./handlers/UIHandler";
+import PlayerHandler from "./handlers/PlayerHandler";
+import MapHandler from "./handlers/MapHandler";
+import Constants from "./Constants";
 
 const tileSize = 100;
 const renderSize = 64;
@@ -33,12 +36,13 @@ const Game = () => {
   const [bombSprites, setBombSprites] = useState({});
 
   const [eventsBound, setEventsBound] = useState(false);
+  const [mapRendered, setMapRendered] = useState(false);
 
   useEffect(() => {
     // Create a Pixi.js application
     const _app = new PIXI.Application({
-      width: 576,
-      height: 576,
+      width: Constants.SCREEN_SIZE.width,
+      height: Constants.SCREEN_SIZE.height,
       backgroundColor: 0xaaaaaa,
     });
 
@@ -96,27 +100,16 @@ const Game = () => {
 
     if (!eventsBound) {
       bindEvents();
-      initialRender();
     }
   }, [room]);
 
-  useEffect(() => {
-    if (layerManager != null) updateLoop();
+  useEffect(() => { 
   }, [lastUpdate, layerManager]);
-
-  useEffect(() => {
-    if (layerManager != null) renderChanges();
-  }, [playerChanges, layerManager]);
-
-  const initialRender = () => {
-    renderMap(); 
-  };
-
-  const updateLoop = () => {
-    console.log("updateLoop");
+ 
+ 
+  const updateLoop = () => { 
     //clearLayers();
-    initialRender();
-    renderPlayers();
+    initialRender(); 
   };
 
   const bindEvents = () => {
@@ -132,99 +125,12 @@ const Game = () => {
     setEventsBound(true);
   };
 
-  const renderChanges = () => {
-    if (layerManager == null) return;
-
-    const playerLayer = layerManager.getLayer("player");
-    if (playerLayer == null) return;
-
-    //render player changes
-    playerChanges.forEach((_playerChange) => {
-      const playerSprite = playerSprites[_playerChange.name];
-      if (playerSprite == null) {
-        const _playerSprites = playerSprites;
-        const _playerSprite = new Player(_playerChange);
-        _playerSprite.render(playerLayer);
-        _playerSprites[_playerChange.name] = _playerSprite;
-        setPlayerSprites(_playerSprites);
-      } else {
-        playerSprite.update(_playerChange);
-      }
-    });
-  };
-
-  const clearLayers = () => {
-    if (layerManager == null) return;
-
-    layerManager.clearLayers();
-  };
- 
-  const renderLayers = () => {
-    if (layerManager == null) return;
-  };
-
-  const renderMap = () => {
-    if (map == null) return;
-
-    console.log({ room });
-    container.removeChildren();
-
-    const rows = 9;
-    const cols = 9;
-
-    const floorLayer = layerManager.getLayer("floor");
-
-    console.log({ floorLayer });
-    for (let row = 0; row < rows; row++) {
-      for (let col = 0; col < cols; col++) {
-        const tile = map.get(`${col},${row}`);
-        if (tile == null) continue;
-        let tileContents = tile.contents.map((_c) => _c.type); 
-        const x = col * renderSize;
-        const y = row * renderSize;
-
-        const tileInstance = new Tile({
-          x,
-          y,
-          type: "floor",
-          width: renderSize,
-          height: renderSize,
-          contents: tileContents,
-        });
-        tileInstance.render(floorLayer);
-        // tileInstance.render(container);
-      }
-    }
-  };
-
-  const renderPlayers = () => {
-    if (players == null) return;
-    const _playerChanges = [];
-
-    players.forEach((_player) => {
-      // Process player changes and push to playerChanges array
-      const playerType = playerName == _player.name ? "player" : "enemy";
-      const playerChange = {
-        name: _player.name,
-        x: _player.x * renderSize + renderOffset.x,
-        y: _player.y * renderSize,
-        type: playerType,
-        width: renderSize - renderOffset.x / 2,
-        height: renderSize,
-      };
-      _playerChanges.push(playerChange);
-    });
-
-    console.log({
-      _playerChanges,
-    });
-
-    setPlayerChanges(_playerChanges);
-  };
   return (
     <div> 
       <UIHandler />
       <BombHandler />
+      <PlayerHandler />
+      <MapHandler />
       <div id="pixi-container"></div>
     </div>
   );
